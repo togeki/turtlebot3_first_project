@@ -46,7 +46,7 @@ echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## TurtleBot3 パッケージのインストール
+## 1-3. TurtleBot3 パッケージのインストール
 
 ```bash
 sudo apt install ros-humble-turtlebot3* -y
@@ -58,6 +58,7 @@ TurtleBot3 モデル設定（Burger を使用）：
 echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 source ~/.bashrc
 ```
+---
 
 # Part 2. キーボード操作（Teleop）
 
@@ -69,9 +70,13 @@ ros2 run turtlebot3_teleop teleop_keyboard
 
 w / a / s / d / x キーでロボットが前後左右に移動します。
 
+---
+
 # Part 3. SLAM による地図生成（SLAM with Cartographer）
 
 Gazebo 上で TurtleBot3 を動かしながら SLAM を実行し、地図を作成します。
+
+---
 
 ## 3-1. Gazebo シミュレーション起動
 
@@ -98,3 +103,7 @@ ros2 run turtlebot3_teleop teleop_keyboard
 ```
 
 ロボットを動かすことで SLAM の地図が広がっていきます。
+
+---
+
+
