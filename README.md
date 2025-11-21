@@ -1,41 +1,42 @@
-# TurtleBot3 First Project / ROS2 TurtleBot3 初めてのプロジェクト
+🐢 TurtleBot3 First Project
 
-> 🌱 A small ROS2 project with virtual TurtleBot3: environment setup, basic control, SLAM and navigation.  
-> 🌱 仮想 TurtleBot3 を使った ROS2 入門プロジェクト：環境構築・基本操作・SLAM・ナビゲーション。
+ROS2 TurtleBot3 Virtual Project (Environment Setup • Basic Control • SLAM • Navigation)
 
----
+🌱 A small ROS2 learning project using a virtual TurtleBot3 robot.
+🌱 仮想 TurtleBot3 を使った ROS2 入門プロジェクト。
 
-## 0. Project Overview / プロジェクト概要
+⸻
 
-**中文说明**
+0. Project Overview / プロジェクト概要
 
-本仓库记录了我在 ROS2 Humble 上学习 TurtleBot3 的过程，从环境配置到：
-- 使用虚拟 TurtleBot3 进行键盘控制
-- 使用 SLAM 进行 2D 建图
-- 保存地图并尝试导航与路径规划（后续部分）
+English
 
-所有实验均在 **Ubuntu 22.04 + ROS2 Humble** 环境下完成，不依赖真实机器人硬件。
+This repository documents my learning process with ROS2 Humble + TurtleBot3 (Burger), including:
+	•	Running TurtleBot3 in a virtual Gazebo simulation
+	•	Teleoperating the robot with keyboard commands
+	•	Performing 2D mapping using SLAM
+	•	Saving maps and (later) testing navigation & path planning
 
-**日本語の説明**
+All experiments are performed on Ubuntu 22.04 + ROS2 Humble, without using any real robot hardware.
 
-このリポジトリは、ROS2 Humble 上で TurtleBot3 を学ぶための記録です。  
-以下のステップを順番にまとめていきます：
+日本語
 
-- 仮想 TurtleBot3 のキーボード操作
-- SLAM を使った 2D 地図生成
-- 地図の保存およびナビゲーション・経路計画（今後追加予定）
+このリポジトリは、ROS2 Humble + TurtleBot3（Burger） を使った学習記録です。
+以下のステップをまとめています：
+	•	Gazebo 上で TurtleBot3 をシミュレーション実行
+	•	キーボード操作による移動
+	•	SLAM による 2D マッピング
+	•	地図保存および（今後追加予定の）ナビゲーションと経路計画
 
-実験環境は **Ubuntu 22.04 + ROS2 Humble** で、実機ロボットは使用していません。
+環境は Ubuntu 22.04 + ROS2 Humble を使用し、実機ロボットは使用していません。
 
----
+⸻
 
-# Part 1. 环境配置 / 環境構築（ROS2 + TurtleBot3）
+Part 1. Environment Setup / 環境構築（ROS2 + TurtleBot3）
 
-> 这一部分只假设你已经有一台运行 **Ubuntu 22.04** 的机器（真实机 / 虚拟机均可）。  
-> このパートでは、**Ubuntu 22.04** 上に ROS2 Humble と TurtleBot3 をセットアップします。
+This section describes how to set up ROS2 Humble and TurtleBot3 on Ubuntu 22.04.
+このパートでは、Ubuntu 22.04 上に ROS2 Humble と TurtleBot3 をセットアップします。
 
-### 1-1. 安装 ROS2 Humble Desktop
+⸻
 
-```bash
-sudo apt update
-sudo apt install ros-humble-desktop -y
+1-1. Install ROS2 Humble Desktop
