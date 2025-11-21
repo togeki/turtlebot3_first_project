@@ -1,42 +1,100 @@
-🐢 TurtleBot3 First Project
+# TurtleBot3 First Project  
+ROS2 TurtleBot3 仮想プロジェクト（環境構築・基本操作・SLAM・ナビゲーション）
 
-ROS2 TurtleBot3 Virtual Project (Environment Setup • Basic Control • SLAM • Navigation)
+> 仮想 TurtleBot3（Burger）を使った ROS2 Humble 入門プロジェクトです。  
+> Gazebo 上で TurtleBot3 を操作し、SLAM による地図生成、地図保存、ナビゲーション・経路計画までの流れをまとめています。
 
-🌱 A small ROS2 learning project using a virtual TurtleBot3 robot.
-🌱 仮想 TurtleBot3 を使った ROS2 入門プロジェクト。
+---
 
-⸻
+## 0. プロジェクト概要 / Project Overview
 
-0. Project Overview / プロジェクト概要
+本リポジトリでは、ROS2 Humble + TurtleBot3（Burger）を使った学習記録をまとめています。  
+主に以下を扱います：
 
-English
+- Gazebo 上で TurtleBot3 をシミュレーション実行  
+- キーボード操作によるロボットの移動  
+- SLAM による 2D マッピング（地図生成）
+- 地図の保存  
+- Nav2 を用いたナビゲーションおよび経路計画（※今後追加予定）
 
-This repository documents my learning process with ROS2 Humble + TurtleBot3 (Burger), including:
-	•	Running TurtleBot3 in a virtual Gazebo simulation
-	•	Teleoperating the robot with keyboard commands
-	•	Performing 2D mapping using SLAM
-	•	Saving maps and (later) testing navigation & path planning
+**使用環境：**
 
-All experiments are performed on Ubuntu 22.04 + ROS2 Humble, without using any real robot hardware.
+- Ubuntu 22.04 LTS  
+- ROS2 Humble  
+- Gazebo + Rviz2  
+- TurtleBot3 Burger（仮想ロボット）
 
-日本語
+---
 
-このリポジトリは、ROS2 Humble + TurtleBot3（Burger） を使った学習記録です。
-以下のステップをまとめています：
-	•	Gazebo 上で TurtleBot3 をシミュレーション実行
-	•	キーボード操作による移動
-	•	SLAM による 2D マッピング
-	•	地図保存および（今後追加予定の）ナビゲーションと経路計画
+# Part 1. 環境構築（ROS2 + TurtleBot3）
 
-環境は Ubuntu 22.04 + ROS2 Humble を使用し、実機ロボットは使用していません。
+ここでは、Ubuntu 22.04 上に ROS2 Humble と TurtleBot3 をセットアップします。
 
-⸻
+---
 
-Part 1. Environment Setup / 環境構築（ROS2 + TurtleBot3）
+## 1-1. ROS2 Humble のインストール
 
-This section describes how to set up ROS2 Humble and TurtleBot3 on Ubuntu 22.04.
-このパートでは、Ubuntu 22.04 上に ROS2 Humble と TurtleBot3 をセットアップします。
+```bash
+sudo apt update
+sudo apt install ros-humble-desktop -y
+```
 
-⸻
+## 1-2. ROS2 アップデート・環境変数設定
 
-1-1. Install ROS2 Humble Desktop
+```bash
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+## TurtleBot3 パッケージのインストール
+
+```bash
+sudo apt install ros-humble-turtlebot3* -y
+```
+
+TurtleBot3 モデル設定（Burger を使用）：
+
+```bash
+echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+source ~/.bashrc
+```
+
+# Part 2. キーボード操作（Teleop）
+
+TurtleBot3 をキーボードで操作します。
+
+```bash
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+w / a / s / d / x キーでロボットが前後左右に移動します。
+
+# Part 3. SLAM による地図生成（SLAM with Cartographer）
+
+Gazebo 上で TurtleBot3 を動かしながら SLAM を実行し、地図を作成します。
+
+## 3-1. Gazebo シミュレーション起動
+
+```bash
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+Gazebo 上に TurtleBot3 が生成されます。
+
+## 3-2. SLAM ノード起動（Cartographer）
+
+```bash
+ros2 launch turtlebot3_cartographer cartographer.launch.py
+```
+
+Rviz2 にリアルタイムで地図が描かれます。
+
+## 3-3. キーボードでロボットを動かす
+
+別ターミナルで teleop：
+
+```bash
+ros2 run turtlebot3_teleop teleop_keyboard
+```
+
+ロボットを動かすことで SLAM の地図が広がっていきます。
