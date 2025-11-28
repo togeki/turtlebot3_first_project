@@ -83,6 +83,8 @@ Gazebo 上で TurtleBot3 を動かしながら SLAM を実行し、地図を作�
 ```bash
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
+<img width="624" height="649" alt="image" src="https://github.com/user-attachments/assets/bafc1638-4471-4bec-8074-c8683c2c3de6" />
+
 
 Gazebo 上に TurtleBot3 が生成されます。
 
@@ -91,6 +93,8 @@ Gazebo 上に TurtleBot3 が生成されます。
 ```bash
 ros2 launch turtlebot3_cartographer cartographer.launch.py
 ```
+<img width="554" height="684" alt="image" src="https://github.com/user-attachments/assets/9d5e6443-9443-4dee-a76e-548012529d93" />
+
 
 Rviz2 にリアルタイムで地図が描かれます。
 
@@ -109,6 +113,7 @@ ros2 run turtlebot3_teleop teleop_keyboard
 ```bash
 ros2 run nav2_map_server map_saver_cli -f ~/turtlebot3_world_map
 ```
+使用した地図ファイルは ./map 以下に配置しています。
 
 ---
 
