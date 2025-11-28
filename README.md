@@ -112,7 +112,7 @@ ros2 run nav2_map_server map_saver_cli -f ~/turtlebot3_world_map
 
 ---
 
-#Part 4. Navigation2 による自律移動
+# Part 4. Navigation2 による自律移動
 
 ## 1-1. Gazebo シミュレーション起動
 
@@ -128,8 +128,16 @@ ros2 launch turtlebot3_navigation2 navigation2.launch.py \
   map:=$HOME/turtlebot3_world_map.yaml
 ```
 
-## 1-3. 
+## 1-3. Rviz2 で目標位置を指定
 
 2D Pose Estimate → ロボットの位置と向きを指定
 
 Nav2 Goal → 目標位置と向きを指定
+
+## 1-4. 経路計画と自律移動（Path Planning & Autonomous Navigation）
+
+Rviz2 上で「2D Pose Estimate」で自己位置を与え，
+「Nav2 Goal」で目的地を設定すると，
+ロボットはグローバルプランナーとローカルプランナーを用いて
+自律的に経路を生成し，障害物を避けながら移動します。
+<img width="835" height="723" alt="image" src="https://github.com/user-attachments/assets/395a873a-fe06-4202-bf32-7ea65824e154" />
