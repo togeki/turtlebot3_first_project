@@ -104,6 +104,32 @@ ros2 run turtlebot3_teleop teleop_keyboard
 
 ロボットを動かすことで SLAM の地図が広がっていきます。
 
+## 3-3. 地図を保存する
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f ~/turtlebot3_world_map
+```
+
 ---
 
+#Part 4. Navigation2 による自律移動
 
+## 1-1. Gazebo シミュレーション起動
+
+```bash
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+## 1-2. Navigation2起動
+
+```bash
+ros2 launch turtlebot3_navigation2 navigation2.launch.py \
+  use_sim_time:=True \
+  map:=$HOME/turtlebot3_world_map.yaml
+```
+
+## 1-3. 
+
+2D Pose Estimate → ロボットの位置と向きを指定
+
+Nav2 Goal → 目標位置と向きを指定
