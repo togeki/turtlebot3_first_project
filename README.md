@@ -15,7 +15,7 @@ ROS2 TurtleBot3 仮想プロジェクト（環境構築・基本操作・SLAM・
 - キーボード操作によるロボットの移動  
 - SLAM による 2D マッピング（地図生成）
 - 地図の保存  
-- Nav2 を用いたナビゲーションおよび経路計画（※今後追加予定）
+- Nav2 を用いたナビゲーションおよび経路計画
 
 **使用環境：**
 
@@ -104,7 +104,7 @@ ros2 run turtlebot3_teleop teleop_keyboard
 
 ロボットを動かすことで SLAM の地図が広がっていきます。
 
-## 3-3. 地図を保存する
+## 3-4. 地図を保存する
 
 ```bash
 ros2 run nav2_map_server map_saver_cli -f ~/turtlebot3_world_map
@@ -141,3 +141,8 @@ Rviz2 上で「2D Pose Estimate」で自己位置を与え，
 ロボットはグローバルプランナーとローカルプランナーを用いて
 自律的に経路を生成し，障害物を避けながら移動します。
 <img width="835" height="723" alt="image" src="https://github.com/user-attachments/assets/395a873a-fe06-4202-bf32-7ea65824e154" />
+
+本プロジェクトにより，ROS2 を用いた自律移動ロボット開発の基礎プロセス
+（環境構築 → センサ情報取得 → SLAM → 地図生成 → ローカライズ → 経路計画 → 自律移動）を一通り習得しました。
+
+---
