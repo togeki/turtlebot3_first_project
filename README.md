@@ -188,3 +188,36 @@ entry_points={
     ],
 }
 ```
+
+## 1-4. ビルド
+
+```bash
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build
+```
+
+```bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+```
+
+## 1-5. シミュレーション起動
+
+```bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+## 1-6. 自律走行ノードの実行
+
+```bash
+ros2 run tb3_first_py maze_left
+```
+
+## 1-7.  動作ロジック
+
+ロボットは前方の距離情報だけで行動を判断する：
+
+if 前方距離 >= 安全閾値: 前進
+if 前方距離 < 安全閾値: 右旋回して空きスペースを探索
