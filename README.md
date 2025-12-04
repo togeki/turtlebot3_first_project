@@ -156,3 +156,35 @@ Rviz2 上で「2D Pose Estimate」で自己位置を与え，
 
 本フェーズでは，SLAM や Nav2 を使用せず，LaserScan `/scan` トピックのみを用いた  
 **ローカル意思決定（local decision making）による自律走行**を実装した。
+
+## 1-1. ROS2 ワークスペースの作成
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+```
+
+## 1-2. Python パッケージの作成
+
+```bash
+ros2 pkg create --build-type ament_python tb3_first_py --dependencies rclpy geometry_msgs sensor_msgs
+```
+
+生成される構造:
+
+ros2_ws/src/tb3_first_py/
+ ├─ package.xml
+ ├─ setup.py
+ └─ tb3_first_py/
+     └─ __init__.py
+
+## 1-3. 自律移動ノードの追加:
+
+setup.py
+```code
+entry_points={
+    'console_scripts': [
+        'maze_left = tb3_first_py.maze_left:main',
+    ],
+}
+```
