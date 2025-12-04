@@ -119,13 +119,13 @@ ros2 run nav2_map_server map_saver_cli -f ~/turtlebot3_world_map
 
 # Part 4. Navigation2 による自律移動
 
-## 1-1. Gazebo シミュレーション起動
+## 4-1. Gazebo シミュレーション起動
 
 ```bash
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
-## 1-2. Navigation2起動
+## 4-2. Navigation2起動
 
 ```bash
 ros2 launch turtlebot3_navigation2 navigation2.launch.py \
@@ -133,13 +133,13 @@ ros2 launch turtlebot3_navigation2 navigation2.launch.py \
   map:=$HOME/turtlebot3_world_map.yaml
 ```
 
-## 1-3. Rviz2 で目標位置を指定
+## 4-3. Rviz2 で目標位置を指定
 
 2D Pose Estimate → ロボットの位置と向きを指定
 
 Nav2 Goal → 目標位置と向きを指定
 
-## 1-4. 経路計画と自律移動（Path Planning & Autonomous Navigation）
+## 4-4. 経路計画と自律移動（Path Planning & Autonomous Navigation）
 
 Rviz2 上で「2D Pose Estimate」で自己位置を与え，
 「Nav2 Goal」で目的地を設定すると，
@@ -157,14 +157,14 @@ Rviz2 上で「2D Pose Estimate」で自己位置を与え，
 本フェーズでは，SLAM や Nav2 を使用せず，LaserScan `/scan` トピックのみを用いた  
 **ローカル意思決定（local decision making）による自律走行**を実装した。
 
-## 1-1. ROS2 ワークスペースの作成
+## 5-1. ROS2 ワークスペースの作成
 
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 ```
 
-## 1-2. Python パッケージの作成
+## 5-2. Python パッケージの作成
 
 ```bash
 ros2 pkg create --build-type ament_python tb3_first_py --dependencies rclpy geometry_msgs sensor_msgs
@@ -180,20 +180,20 @@ ros2_ws/src/tb3_first_py/
      └─ __init__.py
 ```
 
-## 1-3. 自律移動ノードの追加:
+## 5-3. 自律移動ノードの追加:
 
-maze_left.py を作成：
+simple_avoid.py を作成：
 
 ```bash
 cd ~/ros2_ws/src/tb3_first_py/tb3_first_py
-nano maze_left.py
+nano simple_avoid.py
 ```
 
 setup.py
 ```code
 entry_points={
     'console_scripts': [
-        'maze_left = tb3_first_py.maze_left:main',
+        'simple_avoid = tb3_first_py.simple_avoid:main',
     ],
 }
 ```
@@ -221,12 +221,12 @@ ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ## 1-6. 自律走行ノードの実行
 
 ```bash
-ros2 run tb3_first_py maze_left
+ros2 run tb3_first_py simple_avoid
 ```
 
 ## 1-7.  動作ロジック
 
-ロボットは前方の距離情報だけで行動を判断する：
+ロロボットは前方の距離情報だけで行動を判断する単純な避障アルゴリズムを実装：
 
 if 前方距離 >= 安全閾値: 前進
 if 前方距離 < 安全閾値: 右旋回して空きスペースを探索
