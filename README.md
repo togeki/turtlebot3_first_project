@@ -172,13 +172,22 @@ ros2 pkg create --build-type ament_python tb3_first_py --dependencies rclpy geom
 
 生成される構造:
 
+```text
 ros2_ws/src/tb3_first_py/
  ├─ package.xml
  ├─ setup.py
  └─ tb3_first_py/
      └─ __init__.py
+```
 
 ## 1-3. 自律移動ノードの追加:
+
+maze_left.py を作成：
+
+```bash
+cd ~/ros2_ws/src/tb3_first_py/tb3_first_py
+nano maze_left.py
+```
 
 setup.py
 ```code
