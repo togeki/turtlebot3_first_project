@@ -3,12 +3,11 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
-
 class SimpleAvoidNode(Node):
     """
-    最简单可靠的避障：
-    - 前方距离 >= safe_dist：一直向前走
-    - 前方距离 <  safe_dist：原地右转，直到前方有空位
+    简单的避障逻辑：
+    - 前方安全 -> 前进
+    - 前方受阻 -> 原地右转寻找出路
     """
 
     def __init__(self):
@@ -18,8 +17,8 @@ class SimpleAvoidNode(Node):
         self.scan_sub = self.create_subscription(
             LaserScan, 'scan', self.scan_callback, 10)
 
-        self.safe_dist = 2      # 安全距离阈值（可以调）
-        self.front_dist = None    # 最新“前方距离”
+        self.safe_dist = 0.5    # 安全距离阈值 (单位: 米)
+        self.front_dist = None  # 最新“前方距离”
 
         # 10Hz 控制循环
         self.timer = self.create_timer(0.1, self.control_loop)
@@ -27,43 +26,49 @@ class SimpleAvoidNode(Node):
         self.get_logger().info("Simple avoid node started.")
 
     def scan_callback(self, msg: LaserScan):
-        # 取正前方附近一小段的最小距离
-        ranges = list(msg.ranges)
+        ranges = msg.ranges
         n = len(ranges)
         if n == 0:
             return
-        center = n // 2
-        window = max(3, n // 90)  # 小窗口
-
-        sector = ranges[center - window:center + window]
-        vals = [v for v in sector if 0.01 < v < float('inf')]
-        if vals:
-            self.front_dist = min(vals)
+        
+        # --- 关键修正 ---
+        # TurtleBot3 的雷达 0 是正前方
+        # 我们取前方左右各 10 度范围的最小值
+        window = 10  # 范围大小
+        
+        # 拼接数组末尾(350~360度)和数组开头(0~10度)
+        front_ranges = ranges[-window:] + ranges[:window]
+        
+        # 过滤无效数据 (inf 或 0.0)
+        valid_vals = [v for v in front_ranges if 0.05 < v < 10.0]
+        
+        if valid_vals:
+            self.front_dist = min(valid_vals)
         else:
-            self.front_dist = float('inf')
+            # 如果全是 inf，说明前方非常空旷
+            self.front_dist = 10.0 
 
     def control_loop(self):
         if self.front_dist is None:
-            # 还没收到激光，就先不动
             return
 
         twist = Twist()
 
         if self.front_dist < self.safe_dist:
-            # 离前方墙太近：停止前进，原地右转
+            # 遇到障碍：停止并右转
             twist.linear.x = 0.0
-            twist.angular.z = -0.2
-            decision = "turn_right"
+            twist.angular.z = -0.5  # 负数是右转
+            decision = "TURN RIGHT"
         else:
-            # 前方安全：向前走
-            twist.linear.x = 0.15
+            # 前方安全：前进
+            twist.linear.x = 0.2
             twist.angular.z = 0.0
-            decision = "forward"
+            decision = "FORWARD"
 
         self.cmd_pub.publish(twist)
-        self.get_logger().info(
-            f"front_dist={self.front_dist:.2f} -> {decision}"
-        )
+        
+        # 减少日志刷屏，只有状态改变时或者每隔一段时间打印会更好，这里简单打印
+        # self.get_logger().info(f"Dist: {self.front_dist:.2f} -> {decision}")
 
 
 def main(args=None):
@@ -74,13 +79,13 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        # 停车
-        node.cmd_pub.publish(Twist())
-        node.get_logger().info("Simple avoid node shutting down.")
+        # 退出前一定要停车，否则机器人会一直转
+        shutdown_twist = Twist()
+        node.cmd_pub.publish(shutdown_twist)
+        
         node.destroy_node()
         rclpy.shutdown()
 
 
 if __name__ == "__main__":
     main()
-
