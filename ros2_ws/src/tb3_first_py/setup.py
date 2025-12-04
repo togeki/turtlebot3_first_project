@@ -26,7 +26,7 @@ setup(
         'console_scripts': [
             'square_move = tb3_first_py.square_move:main',
             'avoid_move = tb3_first_py.avoid_move:main',
-            'maze_left = tb3_first_py.maze_left:main',
+            'simple_avoid = tb3_first_py.simple_avoid:main',
         ],
     },
 )
