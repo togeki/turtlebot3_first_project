@@ -151,3 +151,8 @@ Rviz2 上で「2D Pose Estimate」で自己位置を与え，
 （環境構築 → センサ情報取得 → SLAM → 地図生成 → ローカライズ → 経路計画 → 自律移動）を一通り習得しました。
 
 ---
+
+# Part 5. Python ノードによる自律的な障害物回避
+
+本フェーズでは，SLAM や Nav2 を使用せず，LaserScan `/scan` トピックのみを用いた  
+**ローカル意思決定（local decision making）による自律走行**を実装した。
