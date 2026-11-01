@@ -1,6 +1,7 @@
 import rclpy
+from rclpy.signals import SignalHandlerOptions
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TwistStamped
 
 
 class SquareMoveNode(Node):
@@ -14,7 +15,8 @@ class SquareMoveNode(Node):
     def __init__(self):
         super().__init__('square_move_node')
 
-        self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.stamped = self.declare_parameter('stamped_cmd_vel', True).value
+        self.cmd_pub = self.create_publisher(TwistStamped if self.stamped else Twist, 'cmd_vel', 10)
 
         # 定时器周期（秒）
         self.timer_period = 0.1  # 10Hz
@@ -36,6 +38,16 @@ class SquareMoveNode(Node):
         self.side_count = 0     # 已经走了多少条边
 
         self.get_logger().info('square_move_node started: drawing a square...')
+
+    def publish_velocity(self, twist):
+        if self.stamped:
+            message = TwistStamped()
+            message.header.stamp = self.get_clock().now().to_msg()
+            message.header.frame_id = 'base_link'
+            message.twist = twist
+        else:
+            message = twist
+        self.cmd_pub.publish(message)
 
     def timer_callback(self):
         twist = Twist()
@@ -77,16 +89,16 @@ class SquareMoveNode(Node):
             twist.angular.z = 0.0
 
         # 发布速度指令
-        self.cmd_pub.publish(twist)
+        self.publish_velocity(twist)
 
     def stop_robot(self):
         # 退出前再发一次 0 速度
         twist = Twist()
-        self.cmd_pub.publish(twist)
+        self.publish_velocity(twist)
 
 
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
     node = SquareMoveNode()
     try:
         rclpy.spin(node)

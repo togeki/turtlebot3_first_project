@@ -1,6 +1,7 @@
 import rclpy
+from rclpy.signals import SignalHandlerOptions
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TwistStamped
 from sensor_msgs.msg import LaserScan
 
 class SimpleAvoidNode(Node):
@@ -13,7 +14,8 @@ class SimpleAvoidNode(Node):
     def __init__(self):
         super().__init__('simple_avoid_node')
 
-        self.cmd_pub = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.stamped = self.declare_parameter('stamped_cmd_vel', True).value
+        self.cmd_pub = self.create_publisher(TwistStamped if self.stamped else Twist, 'cmd_vel', 10)
         self.scan_sub = self.create_subscription(
             LaserScan, 'scan', self.scan_callback, 10)
 
@@ -24,6 +26,16 @@ class SimpleAvoidNode(Node):
         self.timer = self.create_timer(0.1, self.control_loop)
 
         self.get_logger().info("Simple avoid node started.")
+
+    def publish_velocity(self, twist):
+        if self.stamped:
+            message = TwistStamped()
+            message.header.stamp = self.get_clock().now().to_msg()
+            message.header.frame_id = 'base_link'
+            message.twist = twist
+        else:
+            message = twist
+        self.cmd_pub.publish(message)
 
     def scan_callback(self, msg: LaserScan):
         ranges = msg.ranges
@@ -65,14 +77,14 @@ class SimpleAvoidNode(Node):
             twist.angular.z = 0.0
             decision = "FORWARD"
 
-        self.cmd_pub.publish(twist)
+        self.publish_velocity(twist)
         
         # 减少日志刷屏，只有状态改变时或者每隔一段时间打印会更好，这里简单打印
         # self.get_logger().info(f"Dist: {self.front_dist:.2f} -> {decision}")
 
 
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
     node = SimpleAvoidNode()
     try:
         rclpy.spin(node)
@@ -81,7 +93,7 @@ def main(args=None):
     finally:
         # 退出前一定要停车，否则机器人会一直转
         shutdown_twist = Twist()
-        node.cmd_pub.publish(shutdown_twist)
+        node.publish_velocity(shutdown_twist)
         
         node.destroy_node()
         rclpy.shutdown()

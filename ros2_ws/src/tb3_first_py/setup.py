@@ -14,7 +14,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='tgq',
-    maintainer_email='tgq@todo.todo',
+    maintainer_email='maintainer@example.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     extras_require={
@@ -25,7 +25,6 @@ setup(
     entry_points={
         'console_scripts': [
             'square_move = tb3_first_py.square_move:main',
-            'avoid_move = tb3_first_py.avoid_move:main',
             'simple_avoid = tb3_first_py.simple_avoid:main',
         ],
     },

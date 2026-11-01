@@ -1,4 +1,6 @@
-# TurtleBot3 First Project  
+# TurtleBot3 First Project
+
+現在の Jazzy 環境での再現手順と検証範囲は [DEMO.md](DEMO.md) を参照してください。
 ROS2 TurtleBot3 仮想プロジェクト（環境構築・基本操作・SLAM・ナビゲーション）
 
 > 仮想 TurtleBot3（Burger）を使った ROS2 Humble 入門プロジェクトです。  
